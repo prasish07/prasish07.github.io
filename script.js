@@ -6,13 +6,16 @@ const current_temp = document.getElementById('temp')
 const type = document.getElementById('weatherType')
 const today_condition = document.getElementById('current_temp')
 const futureExtraWeather = document.getElementById('weather-forecast')
+const search =document.getElementById('search');
+const inputField = search.querySelector('input');
+const button = document.querySelector('button')
 
 
 
 
 const days = ['Sun','Mon','Tue','Wed','Thur','Fri','Sat']
 
-const API_KEY = '49cc8c821cd2aff9af04c9f98c36eb74';
+const API = '6415e862b372e9b3bb106e469471b041';
 
 setInterval(() => {
     const options = {weekdays:'long',year:'numeric', month:'long', day:'numeric'};
@@ -31,50 +34,83 @@ setInterval(() => {
     dateT1.innerHTML = days[day]  + ' ' + date;
 
 }, 1000);
+
+button.addEventListener('click',()=>{
+    requestAPI(inputField.value);
+    inputField.value = "";
+})
+
+inputField.addEventListener("keyup",e =>{
+    if(e.key == "Enter" && inputField.value !=""){
+        requestAPI(inputField.value);
+        inputField.value = "";
+    }
+})
+function requestAPI(city){
+    
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API}`).then(res=>res.json()).then(W_data =>{
+        // console.log(W_data)
+        timeZone.innerHTML = W_data.name;
+        
+        currentWeather(W_data);
+        })
+}
+function currentWeather(info){
+    let {lat, lon} = info.coord;
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely&units=metric&appid=${API}`).then(res=> res.json()).then(data =>{
+        
+        // console.log(data)
+        showWeatherData(data);
+        })
+    
+}
+
 getDataWeather();
 
 function getDataWeather(){
-    navigator.geolocation.getCurrentPosition((success)=>{
-        console.log(success);
-        let {latitude,longitude} = success.coords;
-
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`).then(res=> res.json()).then(data =>{
+    // navigator.geolocation.getCurrentPosition((success)=>{
+    //     console.log(success);
         
-        console.log(data)
-        showWeatherData(data);
-        })
-    })
+    //     let {latitude,longitude} = success.coords;
+
+    //     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API}`).then(res=> res.json()).then(data =>{
+        
+    //     console.log(data)
+    //     showWeatherData(data);
+    //     })
+        
+    // })
 }
 
 function showWeatherData(data){
-    let {humidity,temp,pressure,wind_speed} = data.current;
-    timeZone.innerHTML = data.timezone;
+    let {humidity,temp,pressure,wind_speed,clouds} = data.current;
+    
     items.innerHTML = 
     `
     <div class="info">
                 <div class="items">
-                    <div class="logoImg"><img src="/icons8-humidity-64.png" alt=""></div>
+                    <div class="logoImg"><img src="/logo/icons8-humidity-64.png" alt=""></div>
                     <div class="name">Humidity</div>
                 </div>
                 <div id="data1" class="data">${humidity}%</div>
             </div>
             <div class="info">
                 <div class="items">
-                    <div class="logoImg"><img src="/icons8-atmospheric-pressure-80.png" alt=""></div>
+                    <div class="logoImg"><img src="/logo/icons8-atmospheric-pressure-80.png" alt=""></div>
                     <div class="name">Air Pressure</div>
                 </div>
                 <div id="data2" class="data">${pressure} PS</div>
             </div>
             <div class="info">
                 <div class="items">
-                    <div class="logoImg"><img src="/icons8-rain-50.png" alt=""></div>
-                    <div class="name">Change of Rain</div>
+                    <div class="logoImg"><img src="/logo/icons8-rain-50.png" alt=""></div>
+                    <div class="name">cloudy</div>
                 </div>
-                <div id="data3" class="data">0%</div>
+                <div id="data3" class="data">${clouds}%</div>
             </div>
             <div class="info">
                 <div class="items">
-                    <div class="logoImg"><img src="/icons8-wind-64.png" alt=""></div>
+                    <div class="logoImg"><img src="/logo/icons8-wind-64.png" alt=""></div>
                     <div class="name">Wind Speed</div>
                 </div>
                 <div id="data4" class="data">${wind_speed}Km/h</div>
@@ -82,15 +118,34 @@ function showWeatherData(data){
     `
     current_temp.innerHTML = `${temp}&#176 C`;
     type.innerHTML = data.current.weather[0].main;
+    if (data.current.weather[0].main =='Clouds'){
+        document.body.style.backgroundImage = "url('/weather_img/p4.jpg')";
+    }
+    else if (data.current.weather[0].main =='Rain'){
+        document.body.style.backgroundImage = "url('/weather_img/p1.jpg')";
+    }
+    else if (data.current.weather[0].main =='Fog'){
+        document.body.style.backgroundImage = "url('/weather_img/p6.jpg')";
+    }
+    else if (data.current.weather[0].main =='Clear'){
+        document.body.style.backgroundImage = "url('/weather_img/p2.jpg')";
+    }
+    else if (data.current.weather[0].main =='Thunderstorm'){
+        document.body.style.backgroundImage = "url('/weather_img/p5.jpg')";
+    }
+    else if (data.current.weather[0].main =='Haze'){
+        document.body.style.backgroundImage = "url('/weather_img/p3.jpg')";
+    }
 
 
+    
 
 let futureForecast = '';
     data.daily.forEach((day,idx)=>{
         if(idx ==0){
             today_condition.innerHTML=
             `
-                <img src="/—Pngtree—cartoon style rain cloud_5675808.png" alt="weather icon" class="w-icon">
+                <img src="/weather_logo_pic/—Pngtree—cartoon style rain cloud_5675808.png" alt="weather icon" class="w-icon">
                 <div class="other">
                     <div class="day">${window.moment(day.dt * 1000).format('dddd')}</div>
                     <div class="temp">Night - ${day.temp.night}&#176; C</div>
@@ -104,8 +159,8 @@ let futureForecast = '';
         else{
             futureForecast += `
             <div class="weather-forecast-item">
-                <div class="day">${window.moment(day.dt * 1000).format('dddd')}</div>
-                <img src="/—Pngtree—cartoon style rain cloud_5675808.png" alt="weather icon" class="w-icon">
+                <div class="day">${window.moment(day.dt * 1000).format('ddd')}</div>
+                <img src="/weather_logo_pic/—Pngtree—cartoon style rain cloud_5675808.png" alt="weather icon" class="w-icon">
                 <div class="temp">Night - ${day.temp.night}&#176; C</div>
                 <div class="temp">Day - ${day.temp.day}&#176; C</div>
             </div>
@@ -114,3 +169,4 @@ let futureForecast = '';
     });
     futureExtraWeather.innerHTML = futureForecast;
 }
+
