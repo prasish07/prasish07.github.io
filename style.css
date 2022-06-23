@@ -174,7 +174,7 @@ header .btn:hover{
     background: #0000007d;
     border-radius: 50px;
     text-align: center;
-    width: auto;
+    width: 60%;
     
 }
 
@@ -292,7 +292,7 @@ header .btn:hover{
     }
 }
 
-@media only screen and (max-height:900px) and (min-height:800px){
+/* @media only screen and (max-height:900px) and (min-height:800px){
     .container{
         /* border: 2px solid red; */
         margin-top: 130px;
@@ -314,7 +314,7 @@ header .btn:hover{
     header{
         justify-content: left;
     }
-}
+} */
 
 @media only screen and (max-width:600px){
     .weather_info{
