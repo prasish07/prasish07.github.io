@@ -63,7 +63,7 @@ header .btn:hover{
     display: flex;
     /* border: 2px solid red; */
     flex-direction: column;
-    width: 17%;
+    width: 100px;
     align-items: center;
     /* justify-content: center; */
     margin-top: 5px;
@@ -85,7 +85,7 @@ header .btn:hover{
 .weather_info .temp{
     font-size: 40px;
     margin-top: 10px;
-    margin-left: 30px;
+    /* margin-left: 30px; */
 
 }
 .time-container{
@@ -255,7 +255,7 @@ header .btn:hover{
 .weather_info .temp{
     font-size: 35px;
 
-    width: 190px;
+    /* width: 190px; */
     
 }
 
@@ -278,6 +278,7 @@ header .btn:hover{
     }
     .weather-info{
         width: 20%;
+
     }
     .time-container{
         padding: 0px;
@@ -286,9 +287,12 @@ header .btn:hover{
         text-align: left;
     }
     .weather_info .temp{
-        margin-left: 60px;
-        width: 190px;
-        
+        /* margin-left: 60px; */
+        /* width: 190px;  */
+    }
+    .weather_info .type{
+        margin-left: 10px;
+
     }
 }
 
