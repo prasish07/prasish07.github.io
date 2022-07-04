@@ -51,7 +51,7 @@ function requestAPI(city){
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API}`).then(res=>res.json()).then(W_data =>{
         // console.log(W_data)
         timeZone.innerHTML = W_data.name;
-        
+        console.log(W_data)
         currentWeather(W_data);
         })
 }
@@ -59,7 +59,7 @@ function currentWeather(info){
     let {lat, lon} = info.coord;
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely&units=metric&appid=${API}`).then(res=> res.json()).then(data =>{
         
-        // console.log(data)
+        console.log(data)
         showWeatherData(data);
         })
     
@@ -91,7 +91,7 @@ function showWeatherData(data){
                 <div class="items">
                     <div class="logoImg"><img src="/logo/icons8-humidity-64.png" alt=""></div>
                     <div class="name">Humidity</div>
-                </div>
+                    </div>
                 <div id="data1" class="data">${humidity}%</div>
             </div>
             <div class="info">
@@ -145,11 +145,11 @@ let futureForecast = '';
         if(idx ==0){
             today_condition.innerHTML=
             `
-                <img src="/weather_logo_pic/—Pngtree—cartoon style rain cloud_5675808.png" alt="weather icon" class="w-icon">
+                <img src="/cloud_logo/p1.png" alt="weather icon" class="w-icon">
                 <div class="other">
                     <div class="day">${window.moment(day.dt * 1000).format('dddd')}</div>
-                    <div class="temp">Night - ${day.temp.night}&#176; C</div>
-                    <div class="temp">Day - ${day.temp.day}&#176; C</div>
+                    <div class="temp">Max - ${day.temp.max}&#176; C</div>
+                    <div class="temp">Min - ${day.temp.min}&#176; C</div>
                 </div>
             `
         }
@@ -160,9 +160,9 @@ let futureForecast = '';
             futureForecast += `
             <div class="weather-forecast-item">
                 <div class="day">${window.moment(day.dt * 1000).format('ddd')}</div>
-                <img src="/weather_logo_pic/—Pngtree—cartoon style rain cloud_5675808.png" alt="weather icon" class="w-icon">
-                <div class="temp">Night - ${day.temp.night}&#176; C</div>
-                <div class="temp">Day - ${day.temp.day}&#176; C</div>
+                <img src="/cloud_logo/p1.png" alt="weather icon" class="w-icon">
+                <div class="temp">Max - ${day.temp.max}&#176; C</div>
+                <div class="temp">Min - ${day.temp.min}&#176; C</div>
             </div>
             `
         }
@@ -170,3 +170,5 @@ let futureForecast = '';
     futureExtraWeather.innerHTML = futureForecast;
 }
 
+
+requestAPI("tikapur");
